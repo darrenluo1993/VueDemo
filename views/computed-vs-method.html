@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Computed VS Method</title>
+    <script src="../assets/modules/vue/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p style="color: red;">
+            computed是基于它的依赖缓存，只有相关依赖发生改变时才会重新取值；<br />
+            而使用methods，在重新渲染的时候，函数总会重新调用执行。<br />
+            可以说使用computed性能会更好，但是如果你不希望缓存，你可以使用methods属性。
+        </p>
+        <input v-model="message" />
+        <p>原始字符串: {{ message }}</p>
+        <p>计算反转字符串: {{ reversedMessage }}</p>
+        <p>方法反转字符串: {{ reversedMessageFunc() }}</p>
+        <br />
+        <input v-model="newMessage" />
+        {{newMessage}}
+        <br /><br /><br />
+        <input v-model="site" style="width: 300px;" />
+        {{name}} && {{url}}
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "message!",
+                newMessage: "new message!",
+                name: "Google",
+                url: "http://www.google.com"
+            },
+            methods: {
+                reversedMessageFunc: function () {
+                    console.log("执行了reversedMessageFunc");
+                    // `this` 指向 vm 实例
+                    return this.message.split("").reverse().join("");
+                }
+            },
+            computed: {
+                // 计算属性的 getter
+                reversedMessage: function () {
+                    console.log("执行了reversedMessage");
+                    // `this` 指向 vm 实例
+                    return this.message.split("").reverse().join("");
+                },
+                site: {
+                    // getter
+                    get: function () {
+                        return this.name + ">>>" + this.url;
+                    },
+                    // setter
+                    set: function (value) {
+                        let nameUrl = value.split(">>>");
+                        this.name = nameUrl[0];
+                        this.url = nameUrl[1];
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

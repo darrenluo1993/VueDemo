@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue.js入门</title>
+    <script src="../assets/modules/vue/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{message}}
+        <button @click="func1">点我</button>
+        <br /><br />
+        用户名：<input type="text" v-model="username" />
+        密　码：<input type="text" v-model="password" />
+        <button @click="func2">操作</button>
+        <br /><br />
+        <div v-show="isShow" style="width: 100px; height: 100px; background-color: red;"></div>
+        <button @click="func3">v-show：显示/隐藏</button>
+        <br /><br />
+        <div v-if="ifValue" style="width: 100px; height: 100px; background-color:yellow;"></div>
+        <button @click="func4">v-if：显示/隐藏</button>
+    </div>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "hello world",
+                username: "default",
+                password: "default",
+                isShow: false,
+                ifValue: false
+            },
+            methods: {
+                func1: function () {
+                    if (this.message === "hello world") {
+                        this.message = "hello vue";
+                    } else if (this.message === "hello vue") {
+                        this.message = "hello world";
+                    } else {
+                        this.message = "unknown";
+                    }
+                },
+                func2: function () {
+                    alert(this.username + "=========" + this.password);
+                },
+                func3: function () {
+                    this.isShow = !this.isShow;
+                },
+                func4: function () {
+                    this.ifValue = !this.ifValue;
+                }
+            },
+            beforeCreate: function () {
+                showData("创建vue实例前", this);
+            },
+            created: function () {
+                showData("创建vue实例后", this);
+            },
+            beforeMount: function () {
+                showData("挂载到dom前", this);
+            },
+            mounted: function () {
+                showData("挂载到dom后", this);
+            },
+            beforeUpdate: function () {
+                showData("数据变化更新前", this);
+            },
+            updated: function () {
+                showData("数据变化更新后", this);
+            },
+            beforeDestroy: function () {
+                showData("vue实例销毁前", this);
+            },
+            destroyed: function () {
+                showData("vue实例销毁后", this);
+            }
+        });
+
+        function showData(process, obj) {
+            console.log(process);
+            console.log("data 数据：" + obj.message);
+            console.log("挂载的对象：");
+            console.log(obj.$el);
+            realDom();
+            console.log("------------------");
+            console.log("------------------");
+        }
+
+        function realDom() {
+            console.log("真实dom结构：" + document.getElementById("app").innerHTML);
+        }
+
+        // 销毁vue实例
+        // app.$destroy();
+    </script>
+
+</body>
+
+</html>
