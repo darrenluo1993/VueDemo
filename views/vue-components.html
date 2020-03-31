@@ -14,34 +14,91 @@
     <hr />
     <div id="app1">
         <global></global>
+        <private></private>
     </div>
     <hr />
     <div id="app2">
         <global></global>
+        <!-- 报错，因为private组件不是全局组件，所以无法引用 -->
         <private></private>
+    </div>
+    <hr />
+    <div id="app3">
+        <div>
+            <input v-model.lazy="message" style="width: 300px;">
+            <br />
+            <global-props :message="message"></global-props>
+        </div>
+    </div>
+    <hr />
+    <div id="app4">
+        <ol>
+            <todo-item v-for="item in sites" :todo="item"></todo-item>
+        </ol>
+        <todo :items="sites"></todo>
     </div>
 
     <script>
-        // 注册全部组件
+        // 注册全局组件
         Vue.component("global", {
-            template: "<h1 style='color:red;'>这是一个全局组件！</h1>"
+            template: "<h3 style='color:red;'>这是一个全局组件！</h3>"
         });
+        // 注册可以设置props的全局组件
+        Vue.component("global-props", {
+            // 声明 props
+            props: ["message"],
+            // 同样也可以在 vm 实例中像 "this.message" 这样使用
+            template: "<span><b>我是一个子组件，父级组件传递给我的内容是：</b>{{ message }}</span>"
+        });
+        // 注册遍历待办事项的全局组件
+        Vue.component("todo-item", {
+            props: ["todo"],
+            template: "<li>{{ todo.text }}</li>"
+        });
+        // 注册待办事项列表的全局组件
+        Vue.component("todo", {
+            props: ["items"],
+            template: "<ol><li v-for='item in items'>{{ item.text }}</li></ol>"
+        })
 
         new Vue({
             el: "#app"
         });
 
         new Vue({
-            el: "#app1"
-        });
-
-        new Vue({
-            el: "#app2",
+            el: "#app1",
             // 注册局部组件
             components: {
                 "private": {
-                    template: "<h1 style='color:blue'>这是一个局部组件！</h1>"
+                    template: "<h3 style='color:blue'>这是一个局部组件！</h3>"
                 }
+            }
+        });
+
+        new Vue({
+            el: "#app2"
+        });
+
+        new Vue({
+            el: "#app3",
+            data: {
+                message: "孩子，这是我传递给你的信息！"
+            }
+        });
+
+        new Vue({
+            el: "#app4",
+            data: {
+                sites: [{
+                        text: 'Runoob'
+                    },
+                    {
+                        text: 'Google'
+                    },
+                    {
+                        text: 'Taobao'
+                    }
+                ]
             }
         });
     </script>
