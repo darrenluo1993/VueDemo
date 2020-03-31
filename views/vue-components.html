@@ -9,16 +9,48 @@
 
 <body>
     <div id="app">
+        <global></global>
+    </div>
+    <hr />
+    <div id="app1">
+        <global></global>
+    </div>
+    <hr />
+    <div id="app2">
+        <global></global>
+        <private></private>
     </div>
 
     <script>
-        var app = new Vue({
-            el: "#app",
-            data: {},
-            methods: {},
-            computed: {}
-        })
+        // 注册全部组件
+        Vue.component("global", {
+            template: "<h1 style='color:red;'>这是一个全局组件！</h1>"
+        });
+
+        new Vue({
+            el: "#app"
+        });
+
+        new Vue({
+            el: "#app1"
+        });
+
+        new Vue({
+            el: "#app2",
+            // 注册局部组件
+            components: {
+                "private": {
+                    template: "<h1 style='color:blue'>这是一个局部组件！</h1>"
+                }
+            }
+        });
     </script>
+
+    <style>
+        hr {
+            border: 2px dashed #cccccc;
+        }
+    </style>
 </body>
 
 </html>
